@@ -1,0 +1,82 @@
+<?php
+/** @var \Shortlab\AppDownloader\ViewModel\Config $config */
+$config = $block->getViewModel();
+
+use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\LucideIcons;
+
+if (!$config->isEnabled()) {
+    return;
+}
+
+$logo = $config->getLogoUrl();
+$isGeneric = $config->isGeneric();
+$generic = $config->getGenericLink();
+$gp = $config->getGooglePlayLink();
+$as = $config->getAppStoreLink();
+$btnText = $config->getButtonText() ?: __('Download');
+$desc = $config->getDescription();
+
+/** @var Escaper $escaper */
+/** @var LucideIcons $lucideIcons */
+
+$lucideIcons = $viewModels->require(LucideIcons::class);
+?>
+
+<script>
+    function initAppDownloader() {
+        return {
+            open: true,
+            imgSrc: null,
+            downloadLink: null,
+            getDownloadLink() {
+                const deviceType = navigator.userAgent || navigator.vendor || window.opera;
+
+                if (/android/i.test(deviceType)) {
+                    this.imgSrc = '<?= $block->escapeUrl($block->getViewFileUrl('Shortlab_AppDownloader::images/google-play.svg')) ?>'
+                    this.downloadLink = '<?= $block->escapeUrl($gp) ?>'
+                }
+
+                if (/iPad|iPhone|iPod/.test(deviceType) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+                    this.imgSrc = '<?= $block->escapeUrl($block->getViewFileUrl('Shortlab_AppDownloader::images/app-store.svg')) ?>'
+                    this.downloadLink = '<?= $block->escapeUrl($as) ?>'
+                }
+
+                return 'other';
+            }
+        }
+    }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initAppDownloader', initAppDownloader);
+    })
+</script>
+
+<div class="appdownloader flex bg-gray-100 items-end w-full border border-gray-300 fixed bottom-0 left-0 p-5 lg:hidden" x-data="initAppDownloader()" x-show="open">
+    <?php if ($logo): ?>
+        <div class="appdownloader-logo mr-5">
+            <img src="<?= $logo ?>" alt="App Logo" width="80"/>
+        </div>
+    <?php endif; ?>
+    
+    <div class="appdownloader-info">
+        <?php if ($desc): ?>
+            <div class="appdownloader-info--description mb-2">
+                <?= nl2br($block->escapeHtml($desc)) ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($isGeneric): ?>
+            <a class="appdownloader-info--link btn btn-primary" href="<?= $block->escapeUrl($generic) ?>">
+                <?= $block->escapeHtml($btnText) ?>
+            </a>
+        <?php else: ?>
+            <a class="appdownloader-info--link" x-bind:href="downloadLink">
+                <img x-bind:src="imgSrc" alt="" width="120">
+            </a>
+        <?php endif; ?>
+    </div>
+
+    <div class="absolute cursor-pointer top-1 right-1" @click="open = !open">
+        <?= $lucideIcons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+    </div>
+</div>

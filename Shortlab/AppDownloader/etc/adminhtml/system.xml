@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+
+    <system>
+        <section id="shortlab_appdownloader" translate="label" sortOrder="900"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>App Downloader</label>
+            <tab>general</tab>
+            <resource>Shortlab_AppDownloader::config</resource>
+
+            <group id="general" translate="label" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+
+                <!-- 1. Enable/disable -->
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <!-- 2. Upload logo -->
+                <field id="app_logo" translate="label" type="image" sortOrder="20"
+                    showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Application Logo</label>
+                    <backend_model>Shortlab\AppDownloader\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system">shortlab/appdownloader/logo</upload_dir>
+                </field>
+
+                <!-- 3. Use/not use generic link -->
+                <field id="use_generic" translate="label" type="select" sortOrder="25"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Use Generic link</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <!-- 3. Generic link -->
+                <field id="generic_link" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Generic download link</label>
+                    <validate>validate-clean-url</validate>
+                    <depends>
+                        <field id="use_generic">1</field>
+                    </depends>
+                </field>
+
+                <!-- 4. Google Play -->
+                <field id="google_play" translate="label" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Google Play link</label>
+                    <validate>validate-clean-url</validate>
+                    <depends>
+                        <field id="use_generic">0</field>
+                    </depends>
+                </field>
+
+                <!-- 5. App Store -->
+                <field id="app_store" translate="label" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>App Store link</label>
+                    <validate>validate-clean-url</validate>
+                    <depends>
+                        <field id="use_generic">0</field>
+                    </depends>
+                </field>
+
+                <!-- 6. Button text -->
+                <field id="button_text" translate="label" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Download Button Text</label>
+                </field>
+
+                <!-- 7. Description -->
+                <field id="description" translate="label" type="textarea" sortOrder="70"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template" name="shortlab_appdownloader" template="Shortlab_AppDownloader::appdownloader.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Shortlab\AppDownloader\ViewModel\Config</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
